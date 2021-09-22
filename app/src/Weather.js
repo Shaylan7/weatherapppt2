@@ -13,42 +13,90 @@ const Weather = () => {
     loadWeather();
   }, []);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    loadWeather();
+  };
+
   // console.log("spec", weather.list[0].weather[0].icon);
 
   // let iconcode = weather[0].icon;
   // let iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
   // let arrayWeather = Object.values(weather);
   // let fahrenheit = Math.round((weather.main.temp - 273.15) * (9 / 5) + 32);
+
   return (
     <div>
+      <form onSubmit={onSubmit}>
+        <label>
+          Search City:{" "}
+          <input
+            onChange={(e) => setCity(e.currentTarget.value)}
+            value={city}
+          />
+        </label>
+        <button>Search</button>
+      </form>
       <h1>{city}</h1>
       <table className="table">
         <thead>
           <tr>
+            <th>Day of Week</th>
             <th>Temperature</th>
             <th>Humidity</th>
             <th>Description</th>
             <th>Icon</th>
           </tr>
         </thead>
-        <tbody></tbody>
-        {weather.map((element, index) => (
-          <tr>
-            <td>{element.main.temp}</td>
-            <td>{element.main.humidity}</td>
-            <td>{element.weather[0].description}</td>
-            <td>
-              <img
-                src={
-                  "http://openweathermap.org/img/w/" +
-                  element.weather[0].icon +
-                  ".png"
-                }
-                alt="icon"
-              />
-            </td>
-          </tr>
-        ))}
+        <tbody>
+          {weather.map((element, index) => {
+            const date = new Date(element.dt * 1000);
+            let dayOfWeek = "";
+            switch (date.getDay()) {
+              case 0:
+                dayOfWeek = "Sunday";
+                break;
+              case 1:
+                dayOfWeek = "Monday";
+                break;
+              case 2:
+                dayOfWeek = "Tuesday";
+                break;
+              case 3:
+                dayOfWeek = "Wednesday";
+                break;
+              case 4:
+                dayOfWeek = "Thursday";
+                break;
+              case 5:
+                dayOfWeek = "Friday";
+                break;
+              case 6:
+                dayOfWeek = "Saturday";
+                break;
+            }
+            return (
+              <tr>
+                <td>{dayOfWeek}</td>
+                <td>
+                  {Math.round((element.main.temp - 273.15) * (9 / 5) + 32)}°F
+                </td>
+                <td>{element.main.humidity}%</td>
+                <td>{element.weather[0].description}</td>
+                <td>
+                  <img
+                    src={
+                      "http://openweathermap.org/img/w/" +
+                      element.weather[0].icon +
+                      ".png"
+                    }
+                    alt="icon"
+                  />
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
       </table>
       {JSON.stringify(weather)}
     </div>
