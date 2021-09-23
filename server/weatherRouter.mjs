@@ -1,6 +1,5 @@
 import express from "express";
 
-import * as db from "./db.mjs";
 import fetch from 'node-fetch'; 
 
 const weatherRouter = express.Router();
@@ -23,11 +22,5 @@ weatherRouter.get("/", async (request, response) => {
 });
 
 weatherRouter.use(express.json()); 
-
-// taskRouter.use(express.json());
-// taskRouter.post("/", async (request, response) => {
-//   const task = await db.addTask(request.body.name);
-//   response.status(201).json(task);
-// });
 
 export default weatherRouter;
